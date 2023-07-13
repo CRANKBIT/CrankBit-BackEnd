@@ -18,7 +18,7 @@ const ReportSchema = new Schema<IReport>({
     type: String,
     required: [true, 'Please enter your report title.'],
   },
-  vehicle: {
+   vehicle: {
     type: String,
     required: [true, 'Please enter the vehicle.'],
   },
@@ -57,5 +57,29 @@ const ReportSchema = new Schema<IReport>({
     default: [],
   },
 })
+
+ReportSchema.statics.createReport = async function (reportData: Partial<IReport>): Promise<IReport> {
+  const report = await this.create(reportData)
+  return report
+}
+
+ReportSchema.statics.getReportById = async function (reportId: string): Promise<IReport | null> {
+  const report = await this.findById(reportId)
+  return report
+}
+
+ReportSchema.statics.updateReport = async function (
+  reportId: string,
+  updatedData: Partial<IReport>
+): Promise<IReport | null> {
+  const report = await this.findByIdAndUpdate(reportId, updatedData, { new: true })
+  return report
+}
+
+ReportSchema.statics.deleteReport = async function (reportId: string): Promise<IReport | null> {
+  const report = await this.findByIdAndDelete(reportId)
+  return report
+}
+
 
 export const Report = mongoose.model<IReport>('Report', ReportSchema)
